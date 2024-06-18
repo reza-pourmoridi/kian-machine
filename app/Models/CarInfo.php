@@ -16,7 +16,6 @@ class CarInfo extends Model
         'axleCount',
         'wheelCount',
         'vin',
-        // ... other car_info table columns
         'purchaseDate',
         'unitCode',
         'register_date',

@@ -2,21 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CarInfo;
+use App\Models\Company;
 use App\Models\Driver;
+use App\Models\DriverInfo;
+use App\Models\CarDriverRelation;
+use App\Models\CarType;
+use App\Models\Car;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Morilog\Jalali\Jalalian;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class DriverController extends Controller
 {
+    private function getDriversData($request)
+    {
+        $drivers = Driver::all();
+
+        $car_type = CarType::all()->keyBy('id');
+        $CarDriverRelation = CarDriverRelation::all()->keyBy('driver_id');
+        $cars = Car::all()->keyBy('id');
+        $company = Company::all()->keyBy('id');
+        $project = Project::all()->keyBy('id');
+
+        if ($request->has('company_id')) {
+            $drivers = $drivers->where('company_id', $request->company_id);
+        }
+
+        if ($request->has('project_id')) {
+            $drivers = $drivers->where('project_id', $request->project_id);
+        }
+
+        if ($request->has('cat_id')) {
+            $drivers = $drivers->where('cat_id', $request->cat_id);
+        }
+
+        if ($request->has('subcat_id')) {
+            $drivers = $drivers->where('subcat_id', $request->subcat_id);
+        }
+
+        return compact('drivers', 'car_type', 'company', 'project', 'cars', 'CarDriverRelation');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $drivers = Driver::all(); // Or filter as needed
-        return view('drivers.index', compact('drivers'));
+        $data = $this->getDriversData($request);
+        return view('dashboard/drivers', $data);
     }
 
     /**
@@ -26,7 +66,12 @@ class DriverController extends Controller
      */
     public function create()
     {
-        return view('drivers.create');
+        $cars = Car::all()->keyBy('id');
+        $car_categories = CarType::where('parent_id', 0)->get();
+        $car_sub_categories = CarType::where('parent_id', '!=', 0)->get()->keyBy('id');
+        $cars_info = CarInfo::all()->keyBy('car_id');
+
+        return view('dashboard.driversForm', compact('cars', 'cars_info', 'car_categories', 'car_sub_categories'));
     }
 
     /**
@@ -35,31 +80,169 @@ class DriverController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'firstName' => 'required|string|max:255',
-            'lastName' => 'required|string|max:255',
-            'nationalId' => 'required|string|max:255',
-            'mobilePhone' => 'required|string|max:255',
-            'company_id' => 'nullable|integer|exists:companies,id', // Adjust validation based on relationships
-            'project_id' => 'nullable|integer|exists:projects,id',
-            'cat_id' => 'nullable|integer',
-            'subcat_id' => 'nullable|integer',
-            'driver_pic' => 'nullable|file',  // Adjust for image validation if needed
-            'licenseType' => 'nullable|string|max:255',
-            'licenseNumber' => 'nullable|string|max:255',
-            'licenseValidityDate' => 'nullable|date',
-            'documentPhoto' => 'nullable|string|max:255',
-        ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+    public function handel_jalalian_date($date){
+//        if ($date && $date !== '------') {
+//            try {
+//                $date = Jalalian::fromFormat('Y/m/d', $date)->toCarbon()->format('Y-m-d');
+//            } catch (\Exception $e) {
+//                $date = null; // Handle invalid date format
+//            }
+//        } else {
+//            $date = null; // Handle null or invalid dates
+//        }
+        return $date;
+    }
+
+    public function store_all(Request $request)
+    {
+        $validatedData = $request->all();
+        if ($validatedData) {
+//            DB::table('drivers')->delete();
+//            DB::table('driver_infos')->delete();
+        }
+        foreach ($validatedData as $item) {
+            $driver = new Driver();
+            $driver->id = $item['id'];
+            $driver->firstName = $item['firstName'];
+            $driver->lastName = $item['lastName'];
+            $driver->nationalId = $item['nationalId'];
+            $driver->mobilePhone = $item['mobilePhone'];
+            $driver->company_id = $item['company_id'];
+            $driver->project_id = $item['project_id'];
+            $driver->cat_id = $item['cat_id'];
+            $driver->subcat_id = $item['subcat_id'];
+            $driver->driver_pic = $item['driverPhoto'];
+            $driver->licenseType = $item['licenseType'];
+            $driver->licenseNumber = $item['licenseNumber'];
+            $driver->licenseValidityDate = $this->handel_jalalian_date($item['licenseValidityDate']);
+            $driver->documentPhoto = $item['documentPhoto'];
+
+            $driver->save();
+
+
+
+            $driverInfoData = $item;
+            $driverInfo = new driverInfo();
+            $driverInfo->driver_id = $driver->id;
+            $driverInfo->fatherName = $driverInfoData['fatherName'];
+            $driverInfo->birthdate = $this->handel_jalalian_date($driverInfoData['birthdate']);
+            $driverInfo->maritalStatus = $driverInfoData['maritalStatus'];
+            $driverInfo->province = $driverInfoData['province'];
+            $driverInfo->gender = $driverInfoData['gender'];
+            $driverInfo->city = $driverInfoData['city'];
+            $driverInfo->section = $driverInfoData['section'];
+            $driverInfo->education = $driverInfoData['education'];
+            $driverInfo->fieldOfStudy = $driverInfoData['fieldOfStudy'];
+            $driverInfo->postalCode = $driverInfoData['postalCode'];
+            $driverInfo->homePhone = $driverInfoData['homePhone'];
+            $driverInfo->address = $driverInfoData['address'];
+            $driverInfo->militaryType = $driverInfoData['militaryServiceType'];
+            $driverInfo->militaryStartDate = $this->handel_jalalian_date($item['militaryServiceStartDate']);
+            $driverInfo->militaryEndDate = $this->handel_jalalian_date($driverInfoData['militaryServiceEndDate']);
+            $driverInfo->militaryCardNumber = $driverInfoData['militaryServiceCardNumber'];
+
+            $driverInfo->employmentDate = $this->handel_jalalian_date($driverInfoData['employmentDate']);
+            $driverInfo->serviceYears = $driverInfoData['serviceYears'];
+            $driverInfo->smartCard = $driverInfoData['smartCard'];
+            $driverInfo->healthCard = $driverInfoData['healthCard'];
+            $driverInfo->busBooklet = $driverInfoData['busBooklet'];
+            $driverInfo->status = $driverInfoData['status'];
+
+
+            $driverInfo->save();
+
         }
 
-        $driver = Driver::create($request->all());
+        return response()->json(['message' => 'driver created successfully'],  201);
+    }
 
-        return redirect()->route('drivers.index')->with('success', 'Driver created successfully!');
+
+    public function store_car_driver(Request $request)
+    {
+        $validatedData = $request->all();
+        if ($validatedData) {
+            DB::table('car_driver_relation')->delete();
+        }
+        foreach ($validatedData as $item) {
+            try {
+                $driver = new CarDriverRelation();
+                $driver->car_id = $item['car_id'];
+                $driver->driver_id = $item['id'];
+                $driver->save();
+            } catch (\Exception $e) {
+                // Log the error or store it in an array for later use
+                $errors[] = [
+                    'car_id' => $item['car_id'],
+                    'driver_id' => $item['id'],
+                    'error' => $e->getMessage()
+                ];
+            }
+        }
+
+        return response()->json(['message' => 'car, driver relation created successfully'],  201);
+    }
+
+    public function store(Request $request)
+    {
+        $item = $request->all();
+
+        $driver = new Driver();
+        $driver->firstName = $item['firstName'];
+        $driver->lastName = $item['lastName'];
+        $driver->nationalId = $item['nationalId'];
+        $driver->mobilePhone = $item['mobilePhone'];
+        $driver->licenseType = $item['licenseType'];
+        $driver->licenseNumber = $item['licenseNumber'];
+        $driver->licenseValidityDate = $this->handel_jalalian_date($item['licenseValidityDate']);
+        if (isset($item['driverPhoto'])) {
+            $driver->driver_pic = upload_image($item['driverPhoto'], 'resized');
+        }
+        if (isset($item['documentPhoto'])) {
+            $driver->documentPhoto = upload_image($item['documentPhoto'], 'resized');
+        }
+        $driver->company_id = $item['company_id'];
+        $driver->project_id = $item['project_id'];
+        $driver->cat_id = $item['cat_id'];
+        $driver->subcat_id = $item['subcat_id'];
+
+
+        $driver->save();
+        $driverInfoData = $item;
+        $driverInfo = new driverInfo();
+        $driverInfo->driver_id = $driver->id;
+        $driverInfo->fatherName = $driverInfoData['fatherName'];
+        $driverInfo->birthdate = $this->handel_jalalian_date($driverInfoData['birthdate']);
+        $driverInfo->maritalStatus = $driverInfoData['maritalStatus'];
+        $driverInfo->province = $driverInfoData['province'];
+        $driverInfo->gender = $driverInfoData['gender'];
+        $driverInfo->city = $driverInfoData['city'];
+        $driverInfo->section = $driverInfoData['section'];
+        $driverInfo->education = $driverInfoData['education'];
+        $driverInfo->fieldOfStudy = $driverInfoData['fieldOfStudy'];
+//        $driverInfo->postalCode = $driverInfoData['postalCode'];
+        $driverInfo->homePhone = $driverInfoData['homePhone'];
+        $driverInfo->address = $driverInfoData['address'];
+        $driverInfo->militaryType = $driverInfoData['militaryServiceType'];
+//        $driverInfo->militaryStartDate = $this->handel_jalalian_date($item['militaryServiceStartDate']);
+//        $driverInfo->militaryEndDate = $this->handel_jalalian_date($driverInfoData['militaryServiceEndDate']);
+//        $driverInfo->militaryCardNumber = $driverInfoData['militaryServiceCardNumber'];
+        $driverInfo->employmentDate = $this->handel_jalalian_date($driverInfoData['employmentDate']);
+//        $driverInfo->serviceYears = $driverInfoData['serviceYears'];
+//        $driverInfo->smartCard = $driverInfoData['smartCard'];
+//        $driverInfo->healthCard = $driverInfoData['healthCard'];
+//        $driverInfo->busBooklet = $driverInfoData['busBooklet'];
+        $driverInfo->status = 0;
+        $result = $driverInfo->save();
+
+        $car_driver_relaion = new CarDriverRelation();
+        $car_driver_relaion->car_id = $item['car_id'];
+        $car_driver_relaion->driver_id = $driver->id;
+        $relation_result = $car_driver_relaion->save();
+        if ($result and $relation_result) {
+            $data = $this->getDriversData($request);
+            return view('dashboard/drivers', $data);
+        }
     }
 
     // ... define methods for show, edit, update, and destroy as needed

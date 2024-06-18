@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('driver_pic', 500)->nullable();
             $table->string('licenseType', 255)->nullable();
             $table->string('licenseNumber', 255)->nullable();
-            $table->date('licenseValidityDate')->nullable();
+            $table->string('licenseValidityDate', 255)->nullable();
             $table->string('documentPhoto', 255)->nullable();
             $table->timestamps();
 

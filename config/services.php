@@ -17,6 +17,9 @@ return [
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
+    'recaptcha' => [
+        'secret' => env('6LfBsvopAAAAAJ-ZCaNmNj2k5PXHFX1IvE_q3DGt'),
+    ],
 
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('car_info', function (Blueprint $table) {
+        Schema::create('car_infos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('car_id')->constrained('cars');
             $table->text('model')->nullable();
@@ -19,7 +19,18 @@ return new class extends Migration
             $table->integer('axleCount')->nullable();
             $table->integer('wheelCount')->nullable();
             $table->text('vin')->nullable();
-            // ... other car_info table columns
+
+            $table->string('engineNumber')->nullable();
+            $table->string('chassisNumber')->nullable();
+            $table->text('bodyNumber')->nullable();
+            $table->integer('plateYear')->nullable();
+            $table->string('color')->nullable();
+            $table->string('fuel')->nullable();
+            $table->string('countryOfManufacture')->nullable();
+            $table->string('ownership')->nullable();
+            $table->string('nationalId')->nullable();
+            $table->string('registrationNumber')->nullable();
+
             $table->date('purchaseDate')->nullable();
             $table->string('unitCode')->nullable();
             $table->timestamp('register_date')->nullable();
@@ -37,6 +48,10 @@ return new class extends Migration
             $table->timestamps();
 
         });
+
+//        22	ownership	varchar(50)	utf8_persian_ci		Yes	NULL			Change Change	Drop Drop
+//        23	nationalId	varchar(50)	utf8_persian_ci		Yes	NULL			Change Change	Drop Drop
+//        24	registrationNumber	varchar(50)	utf8_persian_ci		Yes	NULL			Change Change	Drop Drop
     }
 
     /**
@@ -46,6 +61,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('car_info');
+        Schema::dropIfExists('car_infos');
     }
 };

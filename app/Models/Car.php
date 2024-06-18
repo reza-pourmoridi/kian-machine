@@ -16,7 +16,6 @@ class Car extends Model
         'subcat_id',
         'deviceCode',
         'licensePlateNumber',
-
         'documentUpload',
         'car_pic',
     ];

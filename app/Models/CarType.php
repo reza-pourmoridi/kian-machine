@@ -9,9 +9,7 @@ class CarType extends Model
 {
     use HasFactory;
 
-    // Optional: Enable soft deletes if needed
-    use SoftDeletes;
-
+    protected $table = 'cars_types';
     protected $fillable = [
         'parent_id',
         'name',

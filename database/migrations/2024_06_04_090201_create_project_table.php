@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('project', function (Blueprint $table) {
             $table->id();
-            $table->tinyInteger('parent');
+            $table->tinyInteger('company');
             $table->string('name');
             $table->timestamps();
         });
