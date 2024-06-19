@@ -35608,6 +35608,32 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
     border-radius: 0 !important;
 }
 
+
+/*my new style*/
+.parent-car-items{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+}
+.parent-car-items>div{
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: #f1f2f2;
+    border-radius: 5px;
+    padding: 15px 12px;
+}
+.content-profile-cars{
+    font-size: 16px;
+    color:#444;
+}
+.title-profile-cars{
+    font-size: 16px;
+}
+
+
 @media (min-width: 576px) {
     .menu-item.menu-sm-accordion .menu-arrow:after {
         transform: rotateZ(-90deg);
@@ -36186,6 +36212,48 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
 
     .menu-md-down-rounded-0 .menu-link {
         border-radius: 0 !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .title-profile-cars{
+        font-size: 14px;
+    }
+    .content-profile-cars{
+        font-size: 14px;
+    }
+    .parent-car-items{
+        grid-column-gap: 10px;
+        grid-row-gap: 20px;
+    }
+    .parent-car-items > div{
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 769px) {
+    .parent-car-items{
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .data-driver-profile-cars{
+        padding: 10px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .parent-link-profile-cars{
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .parent-div-profile-cars{
+        width: 100%;
+        margin: 0 !important;
+    }
+    .parent-link-profile-cars img{
+        width: 100% !important;
+    }
+    .padding-mobile{
+        padding: 20px !important;
     }
 }
 
@@ -46342,7 +46410,7 @@ code:not([class*=language-]) {
 }
 
 .symbol.symbol-100px.symbol-fixed > img {
-    width: 100px;
+    width: 300px;
     height: 100px;
     max-width: none;
 }
@@ -48267,8 +48335,8 @@ code:not([class*=language-]) {
     }
 
     .symbol.symbol-lg-160px.symbol-fixed > img {
-        width: 160px;
-        height: 160px;
+        width: 300px;
+        height: 200px;
         max-width: none;
     }
 
@@ -48276,7 +48344,6 @@ code:not([class*=language-]) {
         height: 160px;
         width: 240px;
     }
-
     .symbol.symbol-lg-160px.symbol-2by3 > img {
         height: 160px;
         width: 240px;
@@ -56137,4 +56204,109 @@ body {
     height: 400px !important;
     transition-duration: 500ms;
     transition: height;
+}
+
+
+
+
+/*new searchBox style*/
+
+.search-box{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+.btn-title-search-box{
+    width: 90px;
+    height: 90px;
+    background: #009ef7;
+    border: 1px solid #009ef7;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 12px 24px #5872c333;
+}
+.btn-title-search-box svg{
+    fill: #fff;
+    width: 30px;
+    height: 30px;
+}
+.parent-search-box{
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 12px 24px #5872c333;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+    overflow: hidden;
+    padding: 10px;
+}
+.parent-search-box .items-input-search-box{
+    position: relative;
+}
+.parent-search-box .items-input-search-box input{
+    background: #fbfbfb;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    height: 50px;
+    color: #333;
+    padding: 10px 30px 10px 5px;
+    width: 100%;
+}
+.parent-search-box .items-input-search-box input::placeholder{
+    color: #333;
+}
+.parent-search-box .items-input-search-box svg{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    fill: #555;
+    width: 15px;
+    height: 15px;
+}
+.parent-search-box button{
+    background: #009ef7;
+    font-size: 18px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid #009ef7;
+    border-radius: 8px;
+    transition: all ease .3s;
+    width: 100%;
+    height: 50px;
+}
+.parent-search-box button svg{
+    width: 20px;
+    fill: #fff;
+    transition: all ease .3s;
+}
+.parent-search-box button:hover{
+    background: #0190e0;
+    border-color: #0190e0;
+}
+
+@media (max-width: 767px) {
+    .parent-search-box{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 576px) {
+    .parent-search-box{
+        grid-template-columns: repeat(1, 1fr);
+    }
 }

@@ -21,7 +21,9 @@ class DriverController extends Controller
 {
     private function getDriversData($request)
     {
-        $drivers = Driver::all();
+        $drivers = Driver::leftJoin('company', 'drivers.company_id', '=', 'company.id')
+            ->leftJoin('project', 'drivers.project_id', '=', 'project.id')
+            ->select('drivers.*', 'company.name as company_name', 'project.name as project_name');;
 
         $car_type = CarType::all()->keyBy('id');
         $CarDriverRelation = CarDriverRelation::all()->keyBy('driver_id');
@@ -29,21 +31,36 @@ class DriverController extends Controller
         $company = Company::all()->keyBy('id');
         $project = Project::all()->keyBy('id');
 
-        if ($request->has('company_id')) {
+        if (isset($request->company_id) && !empty($request->company_id)) {
             $drivers = $drivers->where('company_id', $request->company_id);
         }
 
-        if ($request->has('project_id')) {
+        if (isset($request->project_id) && !empty($request->project_id)) {
             $drivers = $drivers->where('project_id', $request->project_id);
         }
 
-        if ($request->has('cat_id')) {
+        if (isset($request->cat_id) && !empty($request->cat_id)) {
             $drivers = $drivers->where('cat_id', $request->cat_id);
         }
 
-        if ($request->has('subcat_id')) {
+        if (isset($request->subcat_id) && !empty($request->subcat_id)) {
             $drivers = $drivers->where('subcat_id', $request->subcat_id);
         }
+
+        if (isset($request->nationalId) && !empty($request->nationalId)) {
+            $drivers = $drivers->where('nationalId', 'like', "%$request->nationalId%");
+        }
+        if (isset($request->phoneNumber) && !empty($request->phoneNumber)) {
+            $drivers = $drivers->where('mobilePhone', 'like', "%$request->phoneNumber%");
+        }
+        if (isset($request->company) && !empty($request->company)) {
+            $drivers = $drivers->where('company.name', 'like', "%$request->company%");
+        }
+        if (isset($request->project) && !empty($request->project)) {
+            $drivers = $drivers->where('project.name', 'like', "%$request->project%");
+        }
+        $drivers = $drivers->get();
+
 
         return compact('drivers', 'car_type', 'company', 'project', 'cars', 'CarDriverRelation');
     }

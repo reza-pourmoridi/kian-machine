@@ -14,4 +14,14 @@ class Project extends Model
         'parent',
         'name',
     ];
+
+    public function cars()
+    {
+        return $this->hasMany(Car::class, 'project_id');
+    }
+
+    public function drivers()
+    {
+        return $this->hasMany(Driver::class, 'company_id');
+    }
 }

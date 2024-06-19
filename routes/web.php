@@ -26,11 +26,17 @@ Route::middleware([AuthMiddleware::class])->group(function () {
         Route::get('/cars-form', [CarController::class, 'create'])->name('dashboard.carsForm');
         Route::post('/cars-form', [CarController::class, 'store'])->name('cars.store');
 
+
+        Route::get('/cars/{id}/edit', [CarController::class, 'edit'])->name('dashboard.carsEdit');
+        Route::post('/cars/{id}/update', [CarController::class, 'update'])->name('dashboard.carsUpdate');
+
+
         Route::get('/cars', [CarController::class, 'index'])->name('dashboard/cars.index');
         Route::get('/cars/{id}', [CarController::class, 'show'])->name('cars.show');
 
         Route::post('/drivers-form', [DriverController::class, 'store'])->name('drivers.store');
         Route::get('/drivers-form', [DriverController::class, 'create'])->name('dashboard/drivers-form');
+
         Route::get('/drivers', [DriverController::class, 'index'])->name('dashboard/drivers.index');
 
         Route::get('/add-user', [UserController::class, 'create'])->name('dashboard.addUser');
