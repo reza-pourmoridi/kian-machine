@@ -61,7 +61,7 @@
                                     @foreach($drivers as $driver)
                                         <div class="col-md-3 mb-10 cars-items">
                                             <div class="card bordered">
-                                                <img src="resized/{{$driver['driver_pic']}}" class="card-img-top" style="height: 200px !important;object-fit: cover">
+                                                <img src="public/resized/{{$driver['driver_pic']}}" class="card-img-top" style="height: 200px !important;object-fit: cover">
                                                 <div class="card-body px-5 d-flex justify-content-between align-items-center">
                                                     <div>
                                                         <h4 class="card-title p-0 m-0">{{$driver['firstName']}} {{$driver['lastName']}}</h4>

@@ -19,7 +19,8 @@ Route::middleware([AuthMiddleware::class])->group(function () {
         Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
         Route::get('/settings', function () {return view('dashboard.setting');})->name('dashboard.settings');
-        Route::get('/repair-form', function () {return view('dashboard.repair');})->name('dashboard.repairForm');
+        Route::get('/repair/repair-form', function () {return view('dashboard.repair.repair');})->name('dashboard.repairForm');
+        Route::get('/repair/repairs_list', function () {return view('dashboard.repair.repairsList');})->name('dashboard.repairsList');
         Route::get('/map', function () {return view('dashboard.map');})->name('dashboard.map');
         Route::get('/profile', function () {return view('dashboard.profile');})->name('dashboard.profile');
 

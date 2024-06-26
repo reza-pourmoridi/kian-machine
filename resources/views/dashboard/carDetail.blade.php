@@ -52,13 +52,8 @@
                                         </button>
                                         <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-200px py-3" data-kt-menu="true" style="">
                                             <div class="menu-item px-3">
-                                                <a onclick="changeProject2('{{$driver['company_id']}}','{{$car['id']}}');" class="menu-link px-3">
+                                                <a onclick="changeProject2('{{$car['company_id']}}','{{$car['id']}}');" class="menu-link px-3">
                                                     انتقال به پروژه دیگر
-                                                </a>
-                                            </div>
-                                            <div class="menu-item px-3">
-                                                <a href="/new-repair?car_id=14" class="menu-link px-3">
-                                                    ثبت تعمیر جدید
                                                 </a>
                                             </div>
                                             <div class="menu-item px-3">
@@ -84,22 +79,29 @@
                                 <div class="card-body pb-0">
                                     <div class="d-flex flex-wrap flex-sm-nowrap">
                                         <div class="me-7 mb-4">
-                                            <a class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative" href="{{ asset('resized/'.$car['car_pic']) }}" target="_blank">
-                                                <img src="{{ asset('resized/'.$car['car_pic']) }}" style="height: 156px !important;object-fit: cover">
+                                            <a class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative" href="{{ asset('public/resized/'.$car['car_pic']) }}" target="_blank">
+                                                <img src="{{ asset('public/resized/'.$car['car_pic']) }}" style="height: 156px !important;object-fit: cover">
                                             </a>
                                         </div>
                                         <div class="flex-grow-1">
                                             <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
                                                 <div class="d-flex flex-column">
                                                     <div class="d-flex align-items-center mb-2">
-                                                        <a class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{$driver['firstName']}} {{$driver['lastName']}}</a>
-                                                        <a>
-                                                            <i class="ki-duotone ki-verify fs-1 text-primary">
-                                                                <span class="path1"></span>
-                                                                <span class="path2"></span>
-                                                            </i>
-                                                        </a>
+                                                        @if($driver)
+                                                            <a class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{$driver['firstName']}} {{$driver['lastName']}}</a>
+
+                                                            <a>
+                                                                <i class="ki-duotone ki-verify fs-1 text-primary">
+                                                                    <span class="path1"></span>
+                                                                    <span class="path2"></span>
+                                                                </i>
+                                                            </a>
+                                                        @else
+                                                            <a class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">بدون راننده</a>
+
+                                                        @endif
                                                     </div>
+                                                    @if($driver)
                                                     <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2 ">
                                                         <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
                                                             <i class="ki-duotone ki-profile-circle fs-4 me-1">
@@ -123,6 +125,7 @@
                                                                 <span class="path2"></span>
                                                             </i>{{$driver_info['homePhone']}}</a>
                                                     </div>
+                                                @endif
                                                 </div>
                                                 <div class="d-flex my-4"></div>
                                             </div>
@@ -252,7 +255,7 @@
                                                             </div>
                                                             <div class="">
                                                                 <div class="fw-bold title-profile-cars">شرکت مالک</div>
-                                                                <div class=" content-profile-cars">@if(isset($company[$driver['company_id']])){{$company[$driver['company_id']]['name']}}@endif </div>
+                                                                <div class=" content-profile-cars">@if(isset($company[$car['company_id']])){{$company[$car['company_id']]['name']}}@endif </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -293,59 +296,41 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3 col-md-5 col-sm-5 col-12 ">
+                                        @if($driver)
+                                            @foreach($all_driver_info as $driver)
+                                                <div class="col-lg-3 col-md-5 col-sm-5 col-12 ">
                                             <div class="card mb-5">
                                                 <div class="card-body padding-mobile">
                                                     <div class="d-flex flex-center flex-column">
-                                                        <a class="symbol symbol-100px symbol-circle mb-7" href="{{ asset('resized/'.$driver['driver_pic']) }}" target="_blank" style="border: 5px #eaeaea solid;box-shadow: 0 2px 5px rgba(0,0,0,0.1)">
-                                                            <img src="{{ asset('resized/'.$driver['driver_pic']) }}">
+                                                        <a class="symbol symbol-100px symbol-circle mb-7" href="{{ asset('public/resized/'.$driver['driver']['driver_pic']) }}" target="_blank" style="border: 5px #eaeaea solid;box-shadow: 0 2px 5px rgba(0,0,0,0.1)">
+                                                            <img src="{{ asset('public/resized/'.$driver['driver']['driver_pic']) }}">
                                                         </a>
                                                         <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">
-                                                            جلال شهریاری								</a>
+                                                            {{$driver['driver']['firstName']}}	{{$driver['driver']['lastName']}}								</a>
                                                         <div class="mb-9">
-                                                            <div class="badge badge-lg badge-light-primary d-inline px-5 round rounded">0850035872</div>
+                                                            <div class="badge badge-lg badge-light-primary d-inline px-5 round rounded">
+                                                                {{$driver['driver']['nationalId']}}</div>
                                                         </div>
-                                                        <div class="fw-bold mb-3">متولد 1369/04/28 | خراسان جنوبی | فردوس</div>
+                                                        <div class="fw-bold mb-3">متولد {{$driver['driver_info']['birthdate']}} | {{$driver['driver_info']['province']}} | {{$driver['driver_info']['city']}}</div>
                                                     </div>
                                                     <div class=" fs-6">
                                                         <div class="fw-bold mt-2">نام پدر</div>
-                                                        <div class="text-gray-600">{{$driver_info['fatherName']}}</div>
+                                                        <div class="text-gray-600">{{$driver['driver_info']['fatherName']}}</div>
                                                         <div class="fw-bold mt-2">وضعیت تاهل</div>
                                                         <div class="text-gray-600">
-                                                            @if($driver_info['maritalStatus'] == 'married')
+                                                            @if($driver['driver_info']['maritalStatus'] == 'married')
                                                                 متاهل
                                                             @else
                                                                 مجرد
                                                             @endif</div>
                                                         <div class="fw-bold mt-2">آدرس</div>
-                                                        <div class="text-gray-600">فردوس بلوار حصار حصار 9</div>
+                                                        <div class="text-gray-600">{{$driver['driver_info']['address']}}</div>
                                                     </div>
                                                 </div>
                                             </div>
-{{--                                            <div class="card mb-5">--}}
-{{--                                                <div class="card-body padding-mobile">--}}
-{{--                                                    <div class="d-flex flex-center flex-column">--}}
-{{--                                                        <a class="symbol symbol-100px symbol-circle mb-7" href="uploads/photo11021665109_662ab49b55f31.jpg" target="_blank" style="border: 5px #eaeaea solid;box-shadow: 0 2px 5px rgba(0,0,0,0.1)">--}}
-{{--                                                            <img src="assets/media/avatars/300-1.jpg">--}}
-{{--                                                        </a>--}}
-{{--                                                        <a class="fs-3 text-gray-800 text-hover-primary fw-bold mb-3">--}}
-{{--                                                            حسین رضایی								</a>--}}
-{{--                                                        <div class="mb-9">--}}
-{{--                                                            <div class="badge badge-lg badge-light-primary d-inline px-5 round rounded">0850035872</div>--}}
-{{--                                                        </div>--}}
-{{--                                                        <div class="fw-bold mb-3">متولد 1370/08/14 |  بندرعباس | حلما</div>--}}
-{{--                                                    </div>--}}
-{{--                                                    <div class=" fs-6">--}}
-{{--                                                        <div class="fw-bold mt-2">نام پدر</div>--}}
-{{--                                                        <div class="text-gray-600">محمد</div>--}}
-{{--                                                        <div class="fw-bold mt-2">وضعیت تاهل</div>--}}
-{{--                                                        <div class="text-gray-600">مجرد</div>--}}
-{{--                                                        <div class="fw-bold mt-2">آدرس</div>--}}
-{{--                                                        <div class="text-gray-600">تهران بلوار آزادی پلاک 9</div>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
                                         </div>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="bimeh" 		role="tabpanel">

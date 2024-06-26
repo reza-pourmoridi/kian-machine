@@ -12,10 +12,11 @@ use App\Models\Car;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Morilog\Jalali\Jalalian;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic as Image;
+//use Intervention\Image\ImageManagerStatic as Image;
 
 class DriverController extends Controller
 {
@@ -200,6 +201,8 @@ class DriverController extends Controller
         return response()->json(['message' => 'car, driver relation created successfully'],  201);
     }
 
+
+
     public function store(Request $request)
     {
         $item = $request->all();
@@ -213,6 +216,7 @@ class DriverController extends Controller
         $driver->licenseNumber = $item['licenseNumber'];
         $driver->licenseValidityDate = $this->handel_jalalian_date($item['licenseValidityDate']);
         if (isset($item['driverPhoto'])) {
+//            $driver->driver_pic = $this->upload_image($item['driverPhoto'], 'resized');
             $driver->driver_pic = upload_image($item['driverPhoto'], 'resized');
         }
         if (isset($item['documentPhoto'])) {
@@ -257,8 +261,8 @@ class DriverController extends Controller
         $car_driver_relaion->driver_id = $driver->id;
         $relation_result = $car_driver_relaion->save();
         if ($result and $relation_result) {
-            $data = $this->getDriversData($request);
-            return view('dashboard/drivers', $data);
+            return redirect()->route('dashboard/drivers-form')->with('driver_form_message', 'راننده اضافه شد.');
+
         }
     }
 

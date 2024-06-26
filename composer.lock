@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb6a74cc03cbda1a4f1ff847b30c51bc",
+    "content-hash": "77adeb4890ae48fb0c8a4cafd5cbfffa",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1183,16 +1183,16 @@
         },
         {
             "name": "intervention/image",
-            "version": "3.6.5",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Intervention/image.git",
-                "reference": "d428433aa74836ab75e8d4a5241628bebb7f4077"
+                "reference": "6bfd3dd1d430c5224c728dc4f8b2fdc757b5eaf5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Intervention/image/zipball/d428433aa74836ab75e8d4a5241628bebb7f4077",
-                "reference": "d428433aa74836ab75e8d4a5241628bebb7f4077",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/6bfd3dd1d430c5224c728dc4f8b2fdc757b5eaf5",
+                "reference": "6bfd3dd1d430c5224c728dc4f8b2fdc757b5eaf5",
                 "shasum": ""
             },
             "require": {
@@ -1239,7 +1239,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Intervention/image/issues",
-                "source": "https://github.com/Intervention/image/tree/3.6.5"
+                "source": "https://github.com/Intervention/image/tree/3.7.0"
             },
             "funding": [
                 {
@@ -1251,7 +1251,84 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-06T17:15:24+00:00"
+            "time": "2024-06-13T16:34:59+00:00"
+        },
+        {
+            "name": "intervention/image-laravel",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/image-laravel.git",
+                "reference": "24738a017d42a6fa8d9adabdbd69a2c19c5b0d30"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/image-laravel/zipball/24738a017d42a6fa8d9adabdbd69a2c19c5b0d30",
+                "reference": "24738a017d42a6fa8d9adabdbd69a2c19c5b0d30",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^8|^9|^10|^11",
+                "intervention/image": "^3.7",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^8.18",
+                "phpunit/phpunit": "^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Intervention\\Image\\Laravel\\ServiceProvider"
+                    ],
+                    "aliases": {
+                        "Image": "Intervention\\Image\\Laravel\\Facades\\Image"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Intervention\\Image\\Laravel\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@intervention.io",
+                    "homepage": "https://intervention.io/"
+                }
+            ],
+            "description": "Laravel Integration of Intervention Image",
+            "homepage": "https://image.intervention.io/",
+            "keywords": [
+                "gd",
+                "image",
+                "imagick",
+                "laravel",
+                "resize",
+                "thumbnail",
+                "watermark"
+            ],
+            "support": {
+                "issues": "https://github.com/Intervention/image-laravel/issues",
+                "source": "https://github.com/Intervention/image-laravel/tree/1.3.0"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/interventionio",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Intervention",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-06-15T08:20:20+00:00"
         },
         {
             "name": "laravel/framework",

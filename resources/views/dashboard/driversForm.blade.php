@@ -17,6 +17,13 @@
                         <!--end::Header-->
                         <!--begin::Body-->
                         <div class="card-body py-0">
+                            @if (session('driver_form_message'))
+                                <div class="alert alert-success">
+                                    {{ session('driver_form_message') }}
+                                </div>
+                            @endif
+
+
                             <form class="pb-7" action="{{ route('drivers.store') }}"  method="post" enctype="multipart/form-data">
                                 @csrf
 

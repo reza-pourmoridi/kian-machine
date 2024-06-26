@@ -66,7 +66,7 @@
                             @foreach($cars as $car)
                                 <div class="col-md-3 mb-10 cars-items">
                                     <div class="card bordered">
-                                        <img src="resized/{{$car['car_pic']}}" class="card-img-top"  style="height: 200px !important;object-fit: cover">
+                                        <img src="public/resized/{{$car['car_pic']}}" class="card-img-top"  style="height: 200px !important;object-fit: cover">
                                         <div class="card-body px-5 d-flex justify-content-between align-items-center">
                                             <a href="{{ route('dashboard/cars.index') }}/{{$car['id']}}">
                                                 <h4 class="card-title p-0 m-0">{{$car_type[$car['cat_id']]['name']}}</h4>
@@ -131,6 +131,16 @@
                                             </div>
                                         </div>
                                         <ul class="list-group list-group-flush px-0 mb-2 bg-transparent">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <small>تعداد راننده</small>
+                                                <h5 class="py-0 my-0">
+                                                    @if(isset($driverCountsArray[$car['id']]))
+                                                        {{$driverCountsArray[$car['id']]}}
+                                                    @else
+                                                        --
+                                                    @endif
+                                                </h5>
+                                            </li>
                                             <li class="list-group-item d-flex justify-content-between">
                                                 <small>پلاک ماشین</small>
                                                 <h5 class="py-0 my-0">{{$car['licensePlateNumber']}}</h5>

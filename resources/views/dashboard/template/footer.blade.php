@@ -6,10 +6,11 @@
 <!--end::Page-->
 </div>
 <!--end::Root-->
-<script src="{{ asset('assets/plugins/global/plugins.bundle.js') }}"></script>
-<script src="{{ asset('assets/js/scripts.bundle.js') }}"></script>
-<script src="{{ asset('assets/js/widgets.bundle.js') }}"></script>
-<script src="{{ asset('assets/js/custom/widgets.js') }}"></script>
+<script src="{{ asset('public/assets/plugins/global/plugins.bundle.js') }}"></script>
+<script src="{{ asset('public/assets/js/scripts.bundle.js') }}"></script>
+<script src="{{ asset('public/assets/js/widgets.bundle.js') }}"></script>
+<script src="{{ asset('public/assets/js/custom/widgets.js') }}"></script>
+<script src="{{ asset('public/assets/js/custom/index.js') }}"></script>
 </body>
 </html><script>
     function filterCars(val) {

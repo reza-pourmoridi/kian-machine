@@ -28,6 +28,11 @@ class CarController extends Controller
         $car_type = CarType::all()->keyBy('id');
         $company = Company::all()->keyBy('id');
         $project = Project::all()->keyBy('id');
+        $driverCounts = CarDriverRelation::select('car_id')
+            ->groupBy('car_id')
+            ->selectRaw('car_id, count(*) as count')
+            ->pluck('count', 'car_id');
+        $driverCountsArray = $driverCounts->toArray();
         if (isset($request->company_id) && !empty($request->company_id)) {
             $cars = $cars->where('company_id', $request->company_id);
         }
@@ -57,7 +62,7 @@ class CarController extends Controller
         $cars = $cars->get();
 //        dd($finalSql, $plate);
 
-        return view('dashboard/cars', compact('cars', 'car_type', 'company', 'project'));
+        return view('dashboard/cars', compact('cars', 'car_type', 'company', 'project', 'driverCountsArray'));
     }
 
     /**
@@ -98,16 +103,34 @@ class CarController extends Controller
      */
     public function show($id)
     {
+        $driver = null;
+        $driver_info = null;
+
         $car = Car::findOrFail($id);
-        $carInfo = CarInfo::where('car_id', $id)->firstOrFail();
+        $carInfo = CarInfo::where('car_id', $id)->first();
         $car_type = CarType::all()->keyBy('id');
         $company = Company::all()->keyBy('id');
         $project = Project::all()->keyBy('id');
-        $driver_id = CarDriverRelation::where('car_id', $id)->firstOrFail();
-        $driver = Driver::where('id', $driver_id['driver_id'])->firstOrFail();
-        $driver_info = DriverInfo::where('driver_id', $driver_id['driver_id'])->firstOrFail();
 
-        return view('dashboard.carDetail', compact('car', 'carInfo', 'car_type', 'company', 'project', 'driver', 'driver_info'));
+        //first driver
+        $driver_id = CarDriverRelation::where('car_id', $id)->first();
+        if ($driver_id) {
+            $driver = Driver::where('id', $driver_id['driver_id'])->first();
+            $driver_info = DriverInfo::where('driver_id', $driver_id['driver_id'])->first();
+        }
+
+        //all drivers
+        $drivers = CarDriverRelation::where('car_id', $id)->get();
+        $all_driver_info = [];
+        foreach ($drivers as $driver_relation) {
+            $driver = Driver::where('id', $driver_relation['driver_id'])->first();
+            $driver_info = DriverInfo::where('driver_id', $driver_relation['driver_id'])->first();
+            $all_driver_info[$driver['id']] = [
+                'driver' => $driver->toArray(),
+                'driver_info' => $driver_info->toArray()
+            ];
+        }
+        return view('dashboard.carDetail', compact('car', 'carInfo', 'car_type', 'company', 'project', 'driver', 'driver_info', 'all_driver_info'));
     }
 
     /**
@@ -187,6 +210,63 @@ class CarController extends Controller
 
 
 
+    public function store(Request $request)
+    {
+        $data = $request->all();
+
+        // Create the car with the basic details
+        $car = Car::create([
+            'company_id' => $data['company_id'] ?? null,
+            'project_id' => $data['project_id'] ?? null,
+            'cat_id' => $data['cat_id'] ?? null,
+            'subcat_id' => $data['subcat_id'] ?? null,
+            'deviceCode' => $data['deviceCode'] ?? null,
+            'licensePlateNumber' => $data['licensePlateNumber'] ?? null,
+            'documentUpload' => isset($data['documentUpload']) ? upload_image($data['documentUpload'], 'resized') : null,
+            'car_pic' => isset($data['image']) ? upload_image($data['image'], 'resized') : null,
+        ]);
+
+        // Create the car information
+        if ($data['purchaseDate'] ?? '0000-00-00' == '0000-00-00') {
+            $data['purchaseDate'] = null;
+        }
+
+        CarInfo::create([
+            'car_id' => $car->id,
+            'model' => $data['model'] ?? null,
+            'cylinderCount' => $data['cylinderCount'] ?? null,
+            'axleCount' => $data['axleCount'] ?? null,
+            'wheelCount' => $data['wheelCount'] ?? null,
+            'vin' => $data['vin'] ?? null,
+            'engineNumber' => $data['engineNumber'] ?? null,
+            'chassisNumber' => $data['chassisNumber'] ?? null,
+            'bodyNumber' => $data['bodyNumber'] ?? null,
+            'plateYear' => $data['plateYear'] ?? null,
+            'color' => $data['color'] ?? null,
+            'fuel' => $data['fuel'] ?? null,
+            'countryOfManufacture' => $data['countryOfManufacture'] ?? null,
+            'ownership' => $data['ownership'] ?? null,
+            'nationalId' => $data['nationalId'] ?? null,
+            'registrationNumber' => $data['registrationNumber'] ?? null,
+            'purchaseDate' => $data['purchaseDate'] ?? null,
+            'unitCode' => $data['unitCode'] ?? null,
+            'register_date' => $data['reg_date'] ?? null,
+            'tireBody' => $data['tireBody'] ?? null,
+            'carBody' => $data['carBody'] ?? null,
+            'shieldBody' => $data['shieldBody'] ?? null,
+            'glassBody' => $data['glassBody'] ?? null,
+            'motorBody' => $data['motorBody'] ?? null,
+            'ampBody' => $data['ampBody'] ?? null,
+            'lightingBody' => $data['lightingBody'] ?? null,
+            'seatBody' => $data['seatBody'] ?? null,
+            'voiceBody' => $data['voiceBody'] ?? null,
+            'coolerBody' => $data['coolerBody'] ?? null,
+            'codeBody' => $data['codeBody'] ?? null,
+        ]);
+
+        return redirect()->route('dashboard.carsForm')->with('car_form_message', 'ماشین اضافه شد.');
+    }
+
     public function update(Request $request, $id)
     {
         $data = $request->all();
@@ -260,6 +340,12 @@ class CarController extends Controller
             $cars[$key]['cat_name'] = $car_type[$val['subcat_id']]['name'];
         }
         return response()->json($cars);
+    }
+
+    public function get_car_sub_types($id)
+    {
+        $car_type = CarType::where('parent_id', $id)->where('parent_id','!=', 0)->get()->keyBy('id');
+        return response()->json($car_type);
     }
 
     public function get_company_projects($id)

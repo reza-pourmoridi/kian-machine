@@ -59,7 +59,7 @@
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label for="cat_id" class="form-label">نوع خودرو</label>
-                                                <select class="form-select" id="fuel" name="cat_id" required>
+                                                <select onchange="filter_car(this.value)" class="form-select" id="fuel" name="cat_id" required>
                                                     @foreach($car_type as $ct)
                                                         <option @if($car_detail[0]['cat_id'] == $ct['id']) selected @endif value="{{$ct['id']}}">{{$ct['name']}}</option>
                                                     @endforeach
@@ -67,7 +67,7 @@
                                             </div>
                                             <div class="col-md-3 mb-3">
                                                 <label for="subcat_id" class="form-label">سیستم</label>
-                                                <select class="form-select" id="fuel" name="subcat_id" required>
+                                                <select class="form-select" id="subcat_id" name="subcat_id" required>
                                                     @foreach($car_sub_type as $ct)
                                                         <option  @if($car_detail[0]['subcat_id'] == $ct['id']) selected @endif  value="{{$ct['id']}}">{{$ct['name']}}</option>
                                                     @endforeach
@@ -322,9 +322,11 @@
 @endsection
 
 <script>
+    var url = '{{ url('/') }}';
+
     function filter_project(id) {
         $.ajax({
-            url: 'api/company-projects/' + id,
+            url: url + '/api/company-projects/' + id,
             type: 'GET',
             success: function(response) {
                 // Clear the current options in the select element
@@ -341,6 +343,29 @@
             },
             error: function(xhr, status, error) {
                 console.error('Error fetching company projects:', error);
+            }
+        });
+    }
+
+    function filter_car(id) {
+        $.ajax({
+            url: url + '/api/car-sub-types/' + id,
+            type: 'GET',
+            success: function(response) {
+                // Clear the current options in the select element
+                let selectElement = $('#subcat_id');
+                selectElement.empty();
+
+                // Populate the select element with the fetched data
+                $.each(response, function(key, value) {
+                    selectElement.append($('<option>', {
+                        value: key,
+                        text:  value.name// assuming the response has a 'name' property
+                    }));
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching car types:', error);
             }
         });
     }

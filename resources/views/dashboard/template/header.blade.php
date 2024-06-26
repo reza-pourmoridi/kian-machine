@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Include CSS files using the asset helper -->
-    <link href="{{ asset('assets/plugins/global/plugins.bundle.rtl.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('assets/css/style.bundle.rtl.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('views/assets/style.css') }}" rel="stylesheet" type="text/css"/>
-    <script src="{{ asset('views/assets/script.js') }}"></script>
+    <link href="{{ asset('public/assets/plugins/global/plugins.bundle.rtl.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('public/assets/css/style.bundle.rtl.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('public/views/assets/style.css') }}" rel="stylesheet" type="text/css"/>
+    <script src="{{ asset('public/views/assets/script.js') }}"></script>
 
 </head>
 <body>
@@ -36,7 +36,7 @@
                                 </i>
                             </button>
                             <a href="{{ route('dashboard.dashboard') }}" class="d-flex align-items-center">
-                                <img alt="Logo" src="{{ asset('uploads/logo1.png') }}" class="h-25px h-lg-30px"/>
+                                <img alt="Logo" src="{{ asset('public/uploads/logo1.png') }}" class="h-25px h-lg-30px"/>
                             </a>
                             <div class="align-self-end overflow-auto" id="kt_brand_tabs">
                                 <div class="header-tabs overflow-auto mx-4 ms-lg-10 mb-5 mb-lg-0" id="kt_header_tabs" data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_header_navs_wrapper', lg: '#kt_brand_tabs'}">
@@ -173,14 +173,14 @@
                                         <span class="text-white fs-8 fw-bold lh-1">خوش آمدید</span>
                                     </div>
                                     <div class="symbol symbol-30px symbol-md-40px">
-                                        <img src="{{ asset('images/no-profile.jpg') }}" alt="image"/>
+                                        <img src="{{ asset('public/images/no-profile.jpg') }}" alt="image"/>
                                     </div>
                                 </div>
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
                                     <div class="menu-item px-3">
                                         <div class="menu-content d-flex align-items-center px-3">
                                             <div class="symbol symbol-50px me-5">
-                                                <img alt="Logo" src="{{ asset('images/no-profile.jpg') }}"/>
+                                                <img alt="Logo" src="{{ asset('public/images/no-profile.jpg') }}"/>
                                             </div>
                                             <div class="d-flex flex-column">
                                                 <div class="fw-bold d-flex align-items-center fs-5">
@@ -236,14 +236,14 @@
                                             </div>
                                             @foreach($menuData['company'] as $company)
                                                 <div>
-                                                    <a href="{{ route('dashboard/cars.index', ['company_id' => $company['id']]) }}" class="btn btn-sm btn fw-bold" data-kt-menu-trigger="hover" data-kt-menu-placement="bottom-end" data-kt-menu-offset="0, 0" >
+                                                    <a href="{{ route('dashboard/cars.index', ['company_id' => $company['id']]) }}" class="hoverClickLink btn btn-sm btn fw-bold" data-kt-menu-trigger="hover" data-kt-menu-placement="bottom-end" data-kt-menu-offset="0, 0" >
                                                         {{$company['name']}}
                                                     </a>
                                                     <div class="py-3 menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-250px" data-kt-menu="true">
                                                         @foreach($menuData['project'] as $project)
                                                             @if($project['company'] == $company['id'])
                                                             <div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
-                                                                <a class="menu-link px-3" href="{{ route('dashboard/cars.index', ['company_id' => $company['id'], 'project_id' => $project['id']]) }}">
+                                                                <a class="hoverClickLink menu-link px-3" href="{{ route('dashboard/cars.index', ['company_id' => $company['id'], 'project_id' => $project['id']]) }}">
                                                                     <span class="menu-title">{{$project['name']}}</span>
                                                                     <span class="menu-arrow"></span>
                                                                 </a>
@@ -251,7 +251,7 @@
                                                                     @foreach($menuData['car_type'] as $car_type)
                                                                         @if($car_type['parent_id'] == 0)
                                                                         <div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
-                                                                            <a class="menu-link px-3" href="{{ route('dashboard/cars.index', ['company_id' => $company['id'], 'project_id' => $project['id'], 'cat_id' => $car_type['id']]) }}">
+                                                                            <a class="hoverClickLink menu-link px-3" href="{{ route('dashboard/cars.index', ['company_id' => $company['id'], 'project_id' => $project['id'], 'cat_id' => $car_type['id']]) }}">
                                                                                 <span class="menu-title">{{$car_type['name']}}</span>
                                                                                 <span class="menu-arrow"></span>
                                                                             </a>
@@ -289,14 +289,14 @@
                                             </div>
                                             @foreach($menuData['company'] as $company)
                                                 <div>
-                                                    <a href="{{ route('dashboard/drivers.index', ['company_id' => $company['id']]) }}" class="btn btn-sm btn fw-bold" data-kt-menu-trigger="hover" data-kt-menu-placement="bottom-end" data-kt-menu-offset="0, 0" >
+                                                    <a href="{{ route('dashboard/drivers.index', ['company_id' => $company['id']]) }}" class="hoverClickLink btn btn-sm btn fw-bold" data-kt-menu-trigger="hover" data-kt-menu-placement="bottom-end" data-kt-menu-offset="0, 0" >
                                                         {{$company['name']}}
                                                     </a>
                                                     <div class="py-3 menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-250px" data-kt-menu="true">
                                                         @foreach($menuData['project'] as $project)
                                                             @if($project['company'] == $company['id'])
                                                                 <div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
-                                                                    <a class="menu-link px-3" href="{{ route('dashboard/drivers.index', ['company_id' => $company['id'], 'project_id' => $project['id']]) }}">
+                                                                    <a class="hoverClickLink menu-link px-3" href="{{ route('dashboard/drivers.index', ['company_id' => $company['id'], 'project_id' => $project['id']]) }}">
                                                                         <span class="menu-title">{{$project['name']}}</span>
                                                                         <span class="menu-arrow"></span>
                                                                     </a>
@@ -304,7 +304,7 @@
                                                                         @foreach($menuData['car_type'] as $car_type)
                                                                             @if($car_type['parent_id'] == 0)
                                                                                 <div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="left-start">
-                                                                                    <a class="menu-link px-3" href="{{ route('dashboard/drivers.index', ['company_id' => $company['id'], 'project_id' => $project['id'], 'cat_id' => $car_type['id']]) }}">
+                                                                                    <a class="hoverClickLink menu-link px-3" href="{{ route('dashboard/drivers.index', ['company_id' => $company['id'], 'project_id' => $project['id'], 'cat_id' => $car_type['id']]) }}">
                                                                                         <span class="menu-title">{{$car_type['name']}}</span>
                                                                                         <span class="menu-arrow"></span>
                                                                                     </a>
@@ -339,7 +339,7 @@
                                             <a class="btn btn-sm btn fw-bold" href="{{ route('dashboard.repairForm') }}">
                                                 ثبت درخواست تعمیر
                                             </a>
-                                            <a class="btn btn-sm btn fw-bold" href="#">
+                                            <a class="btn btn-sm btn fw-bold" href="{{ route('dashboard.repairsList') }}">
                                                 دستور کار
                                             </a>
                                             <a class="btn btn-sm btn fw-bold" href="#">
@@ -624,3 +624,5 @@
                     </div>
                 </div>
             </div>					<!--end::Header-->
+
+
